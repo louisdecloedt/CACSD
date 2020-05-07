@@ -30,4 +30,39 @@ C = [1 0 0 0
 D = [0
      0];
  
+%Poles of the system:
+[V,D] = eig(A);
+%Poles:
+%     0, marginally stable
+%     6.0049, unstable
+%     -5.0774, stable
+%     -17.811, stable
+%Thus the system is unstable
+
+
+%Check if (A,B) is controllable
+CO = ctrb(A,B);
+rank(CO);
+%Rank of CO is 4, the system is thus controllable
+
+%Check if (A,C) is observable
+CA = C*A;
+CA_2 = C*A*A;
+CA_3 = C*A*A*A;
+%Observability matrix O.
+O = [C; CA; CA_2; CA_3];
+rank(O); %Equals 4, thus the system is observable.
+
+%Stabilizability
+%(A,B) is stabilizable if all unstable modes are controllable.
+%Is the case since CO is of full rank.
+
+%Detectability
+%(A,C) is detectable if all unstable modes are observable.
+%Is the case since O is of full rank.
+
+D = zeros(2,1);
+
+tzero(A,B,C,D)
+
 
