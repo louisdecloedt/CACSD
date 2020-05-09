@@ -1,5 +1,5 @@
-clear all;
-close all
+clear;
+close all;
 
 % Parameters
 Ts = 0.05;

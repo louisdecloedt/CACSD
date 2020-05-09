@@ -34,23 +34,14 @@ B = [0
     0
     0
     0];
+
 B(3) = K_m*K_g / (R_m*J_h);
 B(4) = - K_m*K_g / (R_m*J_h);
 
 C = [1  0  0  0
      0  1  0  0];
-% sys_cl.OutputName -- check this lines further
-% C = [1  0  0  0
-%      0  1  0  0
-%      0 0 1 0
-%      0 0 0 1];
- 
-% D = [0
-%      0];
-%D = 0;
 D = [0
     0];
-% 
 
 
 
@@ -58,13 +49,13 @@ sys = ss (A,B,C,D);
  
 
 % Checking Stability
-disp('Poles:')
-eig (A);
+% disp('Poles:')
+% eig (A);
 
 %plotting the location of the poles
-figure
-pzmap(sys);
-
+% figure
+% pzmap(sys);
+% 
 
 %LQR controllor
 %initial values;
@@ -74,15 +65,18 @@ Q0 = [350 0 0 0
       0  0  0 0.5];
 R0 = 10;
 
+% Q0 = [350 0 0 0
+%       0 1500 0 0
+%       0   0 30 0
+%       0  0  0 30];
+% R0 = 10;
+
 %Determine K
 %[K,S,e] = lqr(SYS,Q,R,N)
 %https://nl.mathworks.com/help/control/ref/lqr.html
-%N = optional, default zero (N = 0 is what we need)
 [K,S,e] = lqr(sys,Q0,R0);
-
-size(K)
-!K = K(1,:)
-
+size(K);
+K = K(1,:)
 
 
 
@@ -100,7 +94,7 @@ sys_cl.OutputName={'z','\theta'};
 %sys_cl.OutputName={'\theta','\alpha','d\theta/dt','d\alpha/dt'};
 
 disp('closed-loop poles:');
-eig(A_cl)
+eig(A_cl);
 
 % disp('closed-loop poles (e):');
 % e
@@ -108,6 +102,32 @@ eig(A_cl)
 %Note to myself
 %K is always the same - since it is STATE feedback control
 %Thus doesnt matter which C is used
+
+
+
+%Sampling Period:
+T_s = 0.005; %s
+%
+W_c = 2; %Hz
+
+%Digital part
+A2 = zeros(4,4);
+A2(1,2) = 1;
+A2(2,2) = 1/(1 + W_c*T_s);
+A2(3,4) = 1;
+A2(4,4) = 1/(1 + W_c*T_s);
+
+B2 = zeros(4,2);
+B2(2,1) = W_c*T_s/(1 + W_c*T_s);
+B2(4,2) = W_c*T_s/(1 + W_c*T_s);
+
+C2 = zeros(2,4);
+C2(1,1) = - 1/T_s;
+C2(1,2) =   1/T_s;
+C2(2,3) = - 1/T_s;
+C2(2,4) =   1/T_s;
+
+D2 = zeros(2,2);
 
 
 
@@ -119,10 +139,12 @@ x0 = [0 0 0 0];
 
 %Plotting the response of the closed-loop system to 
 %the initial conditions
-figure
-initial(sys_cl,x0)
-grid
+% figure
+% initial(sys_cl,x0)
+% grid
 
 theta_desired = pi/4; %has to be in [-PI/2,PI/2]
+theta_desired = pi*20/180;
 x_d = [theta_desired 0 0 0];
+
 

@@ -1,5 +1,5 @@
-clear all;
-close all
+clear;
+close all;
 
 % Parameters
 Ts = 0.05;
@@ -40,10 +40,4 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% [Ad,Bd,Cd,Dd] = bilinear(A,B,C,D,1/Ts);
-
 %open_system("template_quadcopter2019.slx")
-
-A
-
-B

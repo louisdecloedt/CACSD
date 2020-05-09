@@ -83,7 +83,7 @@ R0 = 10;
 [K,S,e] = lqr(sys,Q0,R0);
 
 size(K)
-!K = K(1,:)
+K = K(1,:);
 
 
 
@@ -127,4 +127,10 @@ grid
 
 theta_desired = pi/4; %has to be in [-PI/2,PI/2]
 x_d = [theta_desired 0 0 0];
+
+
+% figure
+% pzmap(sys);
+eig = eig(A-B*K)
+
 

@@ -28,7 +28,7 @@ A(4,2) = - (J_l + J_h)*K_stiff / (J_l*J_h);
 A(4,3) =  K_g*K_g*K_m*K_b / (J_h * R_m);
 
 %single input V (u)
-B = zeros(4);
+B = zeros(4,1);
 B(3) = K_m*K_g / (R_m*J_h);
 B(4) = - K_m*K_g / (R_m*J_h);
 
@@ -38,10 +38,6 @@ C = [1  0  0  0
 D = [0
      0];
 
-%TODO: C and D must be determined based on the sensors in the setup
-% C = zeros(4,4);
-% 
-% D = zeros(0);
 
 %TODO: Open loop analysis: Poles and zeros of the system, 
 %System: stable, controllable, observable, stabilizable, detectable, 
@@ -53,10 +49,10 @@ eig (A)
 
 %controllable?
 % disp ('Controllability matrix');
-% CO = ctrb(A,B);
-% disp('Rank of the controllability matrix:');
+CO = ctrb(A,B);
+disp('Rank of the controllability matrix:');
 % size(CO)
-% rank(CO)
+rank(CO)
 %Of full rank thus controllable
 
 %Observable
@@ -69,7 +65,8 @@ CA_3 = C*A*A*A;
 O = [C; CA; CA_2; CA_3]
 rank(O)
 
-%TODO: control Goals
+%Transmission zeros
+z = tzero(A,B,C,D)
 
 
 
