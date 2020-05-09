@@ -28,6 +28,11 @@ A(1:3,4:6) = eye(3);
 A(4:6,4:6) = -kd/m *eye(3);
 A(7:9,10:12) = eye(3);
 
+
+A(4,8) = 40.875*k*cm/m;
+A(5,7) = - 40.875*k*cm/m;
+
+
 B(6,1:4) = k*cm/m;
 B(10,1) = L*k*cm/Ixx;
 B(10,3) = -B(10,1);
@@ -40,10 +45,37 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% [Ad,Bd,Cd,Dd] = bilinear(A,B,C,D,1/Ts);
+Add = inv(eye(size(A)) - (Ts/2)*A)*(eye(size(A)) + (Ts/2)*A)
+Bdd = inv(eye(size(A)) - (Ts/2)*A)*(Ts)*B;
+% Cdd = C*inv(eye(size(A)) - (Ts/2)*A);
+% Ddd = D + C*inv(eye(size(A)) - (Ts/2)*A)*(Ts/2)*B;
+
+[Ad,Bd,Cd,Dd] = bilinear(A,B,C,D,1/Ts);
 
 %open_system("template_quadcopter2019.slx")
 
-A
+disp("Poles discrete system:")
+eig(Ad)
+
+%Check if (A,B) is controllable
+CO_d = ctrb(Add,Bdd);
+rank(CO_d)
+
+% %Check if (A,C) is observable
+% O_d = obsv(Ad,Cd);
+% rank(O_d);
+% % = 12: (A,C) is observable
+% 
+% %hautus_test = rank([eye(12)-Ad,Bd])
+% 
+% %Transmission zeros
+% tzero(Ad,Bd,Cd,Dd)
+
+sysc = ss(A,B,C,D);
+sysd = c2d(sysc,Ts,"zoh");
+[Addd,Bddd,Cddd,Dddd] = ssdata(sysd);
+%eig(Addd)
+
+rank(ctrb(Addd,Bddd))
 
 B
