@@ -1,5 +1,5 @@
-clear all;
-close all
+clear;
+close all;
 
 % Parameters
 Ts = 0.05;
@@ -15,7 +15,7 @@ Izz = 1E-2;
 cm = 1E4;
 
 % initial condition
-x0 = zeros(12,1);
+x0 = zeros(1,12);
 
 % linear state space
 u_e = 40.875*ones(4,1);
@@ -40,6 +40,4 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% [Ad,Bd,Cd,Dd] = bilinear(A,B,C,D,1/Ts);
-
-open_system("template_quadcopter.slx")
+%open_system("template_quadcopter2019.slx")
