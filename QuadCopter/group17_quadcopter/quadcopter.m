@@ -18,7 +18,7 @@ cm = 1E4;
 x0 = zeros(12,1);
 
 % linear state space
-u_e = 40.875*ones(4,1);
+u_e = g*m/(cm*k*4)*ones(4,1); %40.875
 A = zeros(12,12);
 B = zeros(12,4);
 C = zeros(6,12);
@@ -27,6 +27,8 @@ D = zeros(6,4);
 A(1:3,4:6) = eye(3);
 A(4:6,4:6) = -kd/m *eye(3);
 A(7:9,10:12) = eye(3);
+A(4,8) = g;
+A(5,7) = g;
 
 B(6,1:4) = k*cm/m;
 B(10,1) = L*k*cm/Ixx;
