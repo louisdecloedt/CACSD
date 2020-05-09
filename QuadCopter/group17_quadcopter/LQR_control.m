@@ -40,6 +40,10 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% [Ad,Bd,Cd,Dd] = bilinear(A,B,C,D,1/Ts);
+% solve ricatti equation
+q = 1;
+Q = q *(C'*C);
+R = eye(size(B,2));
+[~,K,~] = icare(A,B,Q,R,[],[],[])
 
 open_system("template_quadcopter.slx")
