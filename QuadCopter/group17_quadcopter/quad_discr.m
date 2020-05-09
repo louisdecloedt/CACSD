@@ -29,8 +29,8 @@ A(4:6,4:6) = -kd/m *eye(3);
 A(7:9,10:12) = eye(3);
 
 
-A(4,8) = 40.875*k*cm/m;
-A(5,7) = - 40.875*k*cm/m;
+A(4,8) = 4*40.875*k*cm/m; %= g
+A(5,7) = - 4*40.875*k*cm/m; %= g
 
 
 B(6,1:4) = k*cm/m;
@@ -45,8 +45,8 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-Add = inv(eye(size(A)) - (Ts/2)*A)*(eye(size(A)) + (Ts/2)*A)
-Bdd = inv(eye(size(A)) - (Ts/2)*A)*(Ts)*B;
+% Add = inv(eye(size(A)) - (Ts/2)*A)*(eye(size(A)) + (Ts/2)*A)
+% Bdd = inv(eye(size(A)) - (Ts/2)*A)*(Ts)*B;
 % Cdd = C*inv(eye(size(A)) - (Ts/2)*A);
 % Ddd = D + C*inv(eye(size(A)) - (Ts/2)*A)*(Ts/2)*B;
 
@@ -58,8 +58,8 @@ disp("Poles discrete system:")
 eig(Ad)
 
 %Check if (A,B) is controllable
-CO_d = ctrb(Add,Bdd);
-rank(CO_d)
+% CO_d = ctrb(Add,Bdd);
+% rank(CO_d)
 
 % %Check if (A,C) is observable
 % O_d = obsv(Ad,Cd);
@@ -78,4 +78,5 @@ sysd = c2d(sysc,Ts,"zoh");
 
 rank(ctrb(Addd,Bddd))
 
-B
+Bd
+Ad
