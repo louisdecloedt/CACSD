@@ -1,0 +1,19 @@
+clear all;
+close all
+
+% Parameters
+Ts = 0.05;
+m = 0.5;
+L = 0.25;
+k = 3E-6;
+b = 1E-7;
+g = 9.81;
+kd = 0.25;
+Ixx = 5E-3;
+Iyy = 5E-3;
+Izz = 1E-2;
+cm = 1E4;
+
+
+
+K = inv(R)*transpose(B)*P
