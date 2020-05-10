@@ -16,7 +16,7 @@ cm = 1E4;
 
 % initial condition
 x0 = zeros(12,1);
-x0(3,1) = 0;
+x0(3,1) = 1;
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
