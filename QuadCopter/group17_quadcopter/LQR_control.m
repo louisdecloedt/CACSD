@@ -16,6 +16,7 @@ cm = 1E4;
 
 % initial condition
 x0 = zeros(12,1);
+x0(3,1) = 0;
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
@@ -28,7 +29,7 @@ A(1:3,4:6) = eye(3);
 A(4:6,4:6) = -kd/m *eye(3);
 A(7:9,10:12) = eye(3);
 A(4,8) = g;
-A(5,7) = g;
+A(5,7) = -g;
 
 B(6,1:4) = k*cm/m;
 B(10,1) = L*k*cm/Ixx;
@@ -43,9 +44,10 @@ C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
 % solve ricatti equation
-q = 10;
+q = eye(size(C,2));
+q(1:3,1:3) = 10*eye(3);
 Q = q *(C'*C);
-R = eye(size(B,2));
+R = 5*eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[])
 
 references = zeros(12,1);
