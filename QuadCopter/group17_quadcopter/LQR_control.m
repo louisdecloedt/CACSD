@@ -16,7 +16,11 @@ cm = 1E4;
 
 % initial condition
 x0 = zeros(12,1);
-x0(3,1) = 1;
+
+% destination
+x = 5;
+y = -1;
+z = 2;
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
@@ -45,11 +49,17 @@ C(4:6,7:9) = eye(3);
 
 % solve ricatti equation
 q = eye(size(C,2));
-q(1:3,1:3) = 10*eye(3);
+q(1,1) = 2;
+q(2,2) = 2;
+q(3,3) = 100;
 Q = q *(C'*C);
-R = 5*eye(size(B,2));
+R = eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[])
 
-references = zeros(12,1);
+% Reference
+references = zeros(1,13);
+references(1,2) = x;
+references(1,3) = y;
+references(1,4) = z;
 
 open_system("LQR_control_quadcopter.slx")
