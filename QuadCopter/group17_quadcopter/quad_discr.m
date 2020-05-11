@@ -72,11 +72,13 @@ eig(Ad)
 % tzero(Ad,Bd,Cd,Dd)
 
 sysc = ss(A,B,C,D);
-sysd = c2d(sysc,Ts,"zoh");
+%sysd = c2d(sysc,Ts,"zoh");
+sysd = c2d(sysc,Ts);
 [Addd,Bddd,Cddd,Dddd] = ssdata(sysd);
-%eig(Addd)
 
-rank(ctrb(Addd,Bddd))
+format long
+Addd
+Bddd
 
-Bd
-Ad
+% A_test = expm(A*Ts)
+% B_test = inv(A)*(expm(Ts*A)-eye(12))*B
