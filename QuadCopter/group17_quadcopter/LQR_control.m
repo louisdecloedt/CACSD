@@ -14,19 +14,10 @@ Iyy = 5E-3;
 Izz = 1E-2;
 cm = 1E4;
 
-% initial condition
-x0 = zeros(12,1);
-
 % Reference
-x = 0;
-y = 0;
-z = 1;
-% x = 5;
-% y = -1;
-% z = 2;
-references = zeros(1,7);
-references(1,1) = 1; % 1sec delay
-references(1,2:4) = [x y z];
+load references_17
+
+angle_ref = zeros(3,1);
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
@@ -53,19 +44,28 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% discrete transformation
-[A,B,C,D] = bilinear(A,B,C,D,1/Ts);
-
 % solve ricatti equation
 Q = eye(size(C,2));
+% Q(1:2,1:2) = 10*eye(2);
+% Q(4:5,4:5) = 10*eye(2);
+Q(3,3) = 10000;
+Q(6,6) = 10000;
+% Q(7:9,7:9) = eye(3);
 R = eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[]);
 
+% discrete transformation
+sysc = ss(A,B,C,D);
+sysd = c2d(sysc,Ts,"zoh");
+[A,B,C,D] = ssdata(sysd);
+
 % determine N
-r = size(references,2)-1;
+r = 6;
 N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
+open("LQR_control_quadcopter.slx");
+sim("LQR_control_quadcopter.slx",Tmax);
 
-open_system("LQR_control_quadcopter.slx")
+generate_report(0);

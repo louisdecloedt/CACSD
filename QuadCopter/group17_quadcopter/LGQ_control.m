@@ -47,7 +47,7 @@ C(4:6,7:9) = eye(3);
 % solve ricatti equation
 Q = eye(size(C,2));
 Q(1:2,1:2) = 2*eye(2);
-% Q(3,3) = 1000;
+Q(3,3) = 1000;
 % Q(6,6) = 10;
 % Q(7:9,7:9) = 2*eye(3);
 R = eye(size(B,2));
@@ -64,6 +64,4 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-sim("LQR_control_quadcopter.slx",Tmax);
-
-generate_report(0);
+open("LQR_control_quadcopter.slx");
