@@ -1,9 +1,14 @@
 clear all;
 close all
 
+payload = false;
+
 % Parameters
 Ts = 0.05;
 m = 0.5;
+if payload
+    m = m+0.1;
+end
 L = 0.25;
 k = 3E-6;
 b = 1E-7;
@@ -46,11 +51,8 @@ C(4:6,7:9) = eye(3);
 
 % solve ricatti equation
 Q = eye(size(C,2));
-% Q(1:2,1:2) = 10*eye(2);
-% Q(4:5,4:5) = 10*eye(2);
 Q(3,3) = 10000;
 Q(6,6) = 10000;
-% Q(7:9,7:9) = eye(3);
 R = eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[]);
 
@@ -65,7 +67,10 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-open("LQR_control_quadcopter.slx");
-sim("LQR_control_quadcopter.slx",Tmax);
-
+% open("LQR_control_quadcopter.slx");
+if payload
+    sim("LQR_control_payload_quadcopter.slx",Tmax);
+else
+    sim("LQR_control_quadcopter.slx",Tmax);
+end
 generate_report(0);
