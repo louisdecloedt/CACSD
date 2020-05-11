@@ -17,10 +17,16 @@ cm = 1E4;
 % initial condition
 x0 = zeros(12,1);
 
-% destination
-x = 5;
-y = -1;
-z = 2;
+% Reference
+x = 0;
+y = 0;
+z = 1;
+% x = 5;
+% y = -1;
+% z = 2;
+references = zeros(1,7);
+references(1,1) = 1; % 1sec delay
+references(1,2:4) = [x y z];
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
@@ -47,19 +53,19 @@ B(12,4) = -B(12,4);
 C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
-% solve ricatti equation
-q = eye(size(C,2));
-q(1,1) = 2;
-q(2,2) = 2;
-q(3,3) = 100;
-Q = q *(C'*C);
-R = eye(size(B,2));
-[~,K,~] = icare(A,B,Q,R,[],[],[])
+% discrete transformation
+[A,B,C,D] = bilinear(A,B,C,D,1/Ts);
 
-% Reference
-references = zeros(1,13);
-references(1,2) = x;
-references(1,3) = y;
-references(1,4) = z;
+% solve ricatti equation
+Q = eye(size(C,2));
+R = eye(size(B,2));
+[~,K,~] = icare(A,B,Q,R,[],[],[]);
+
+% determine N
+r = size(references,2)-1;
+N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
+Nx = N(1:12,:);
+Nu = N(13:16,:);
+
 
 open_system("LQR_control_quadcopter.slx")
