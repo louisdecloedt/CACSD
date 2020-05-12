@@ -47,23 +47,36 @@ C(4:6,7:9) = eye(3);
 
 % discrete transformation
 sysc = ss(A,B,C,D);
-sysd = c2d(sysc,Ts,"zoh");
-[A,B,C,D] = ssdata(sysd);
+% sysd = c2d(sysc,Ts,"zoh");
+% [A,B,C,D] = ssdata(sysd);
 
-% solve ricatti equation
-Q = eye(size(C,2));
-Q(3,3) = 10000;
-Q(6,6) = 10000;
-R = eye(size(B,2));
-[~,K,~] = idare(A,B,Q,R,[],[],[]);
+Q = eye(18);
+R = eye(4);
+[K,~,~] = lqi(sysc,Q,R);
+K1 = K(1:4,1:6);
+K0 = K(1:4,7:18);
 
-% determine N
-r = 6;
-N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
-Nx = N(1:12,:);
-Nu = N(13:16,:);
+% % solve ricatti equation
+% % Q(3,3) = 10000;
+% % Q(6,6) = 10000;
+% R = eye(size(B,2));
+% Aic = [eye(size(C,1)) C; zeros(12,6) A];
+% Bic = [D; B];
+% Q = eye(size(Bic,1));
+% [~,K,~] = idare(Aic,Bic+eye(size(Bic)),Q,R,[],[],[]);
 
-% open("LQR_control_quadcopter.slx");
 
-sim("LQR_control_quadcopter.slx",Tmax);
+% sysd = c2d(sysc,Ts,"zoh");
+% [A,B,C,D] = ssdata(sysd);
+% 
+% Q = eye(18);
+% R = eye(4);
+% [~,K,~] = idare(A,B,Q,R,[],[],[]);
+% K1 = K(1:4,1:6)
+% K0 = K(1:4,7:18)
+
+
+
+open("LQR_integral_control_quadcopter.slx");
+sim("LQR_integral_control_quadcopter.slx",Tmax);
 generate_report(0);

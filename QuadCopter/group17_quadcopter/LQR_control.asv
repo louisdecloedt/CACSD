@@ -1,14 +1,10 @@
 clear all;
 close all
 
-payload = false;
 
 % Parameters
 Ts = 0.05;
-if payload
-    
-% m = 0.5; %no payload
-m = 0.5 + 0.1; %payload
+m = 0.5;
 L = 0.25;
 k = 3E-6;
 b = 1E-7;
@@ -51,13 +47,13 @@ C(4:6,7:9) = eye(3);
 
 % solve ricatti equation
 Q = eye(size(C,2));
-% Q(1:2,1:2) = 10*eye(2);
-% Q(4:5,4:5) = 10*eye(2);
-Q(3,3) = 10000;
-Q(6,6) = 10000;
-% Q(7:9,7:9) = eye(3);
+% Q(3,3) = 10000;
+% Q(6,6) = 10000;
 R = eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[]);
+
+
+[~,K,~] = icare([eye(size(C,1) C; zeros(12,6) A],[D; B]-[eye(size(D,2)); zeros(size(D,Q,R,[],[],[]);
 
 % discrete transformation
 sysc = ss(A,B,C,D);
@@ -70,8 +66,9 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-open("LQR_control_quadcopter.slx");
+% open("LQR_control_quadcopter.slx");
 % sim("LQR_control_quadcopter.slx",Tmax);
 % generate_report(0);
-% sim("LQR_control_payload_quadcopter.slx",Tmax);
-% generate_report(0);
+% open("LQR_control_payload_quadcopter.slx");
+sim("LQR_control_payload_quadcopter.slx",Tmax);
+generate_report(0);
