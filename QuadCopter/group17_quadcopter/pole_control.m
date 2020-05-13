@@ -57,23 +57,60 @@ R = eye(size(B,2));
 
 %Reference K out of working LQR controller
 K_d = K;
-p_cl_z = eig(A-B*K_d)
+p_cl_z = eig(A-B*K_d);
 %p_cl_ref_s =  log(p_cl_ref_z)./Ts;
 
-%Try to reconstruct K from poles:
-%K_d = place(A,B,p_cl_z');
+%Poles in continuous time:
+%Closed loop (A - BK)
+%Dominant poles: via second order interpretation dominant poles:
+%damping ratio: 0.75, settle time 4 sec
+% p_cl = [-1.15+1.1014i 
+%         -1.15-1.1014i 
+%         -6 
+%         -6.5 
+%         -7 
+%         -7.5 
+%         -8 
+%         -8.5 
+%         -9 
+%         -9.5 
+%         -10 
+%         -10.5];
+    
+% a = 3;
+% p_cl = [-0.73+0.7i 
+%         -0.73-0.7i 
+%         -a 
+%         -a - 0.7
+%         -a - 0.4
+%         -a - 0.4
+%         -a - 0.7
+%         -a - 0.75
+%         -a - 1
+%         -a - 1.1
+%         -a - 1.3;
+%         -a - 1.25];
 
-%Attempt via sylvester equation.
-%Matlab: Solve Sylvester equation AX + XB = C for X
-%X = sylvester(A,B,C)
+a = 1.2;
+p_cl = [-0.26+0.25i 
+        -0.26-0.25i 
+        -a 
+        -a - 0.1
+        -a - 0.4
+        -a - 0.2
+        -a - 0.4
+        -a - 0.2
+        -a - 0.2
+        -a - 0.25
+        -a - 0.5;
+        -a - 0.2];
 
-lambda = diag(p_cl_z);
-G = randn(4,12);
+p_d_cl = exp(Ts*p_cl);
 
-% X = sylvester(sysd.A,-lambda,sysd.B*G)
-% K_d = G*inv(X);
-
-test = eig(A - B*K_d);
+K_d = place(A,B,p_d_cl);
+%K_d = place(A,B,p_cl_z);
+%K_d = K;
+%test = eig(A - B*K_d)
 % determine N
 r = 6;
 N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
@@ -81,6 +118,14 @@ Nx = N(1:12,:);
 Nu = N(13:16,:);
 
 
-
 sim("AA_pole_placement.slx",Tmax);
 generate_report(0);
+
+
+test = eig(A - B*K_d);
+%log(eig(A - B*K))/Ts
+% log(0.9834 + 0.0148i)/Ts
+
+
+
+

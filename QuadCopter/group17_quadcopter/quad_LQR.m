@@ -25,6 +25,7 @@ z = 1;
 % y = -1;
 % z = 2;
 references = zeros(1,7);
+size(references)
 references(1,1) = 1; % 1sec delay
 references(1,2:4) = [x y z];
 
@@ -66,12 +67,10 @@ R = eye(size(B,2));
 [~,K,~] = icare(A,B,Q,R,[],[],[]);
 
 % determine N
-r = size(references,2)-1;
+r = 6;
 N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
-
-
 
 
 
