@@ -50,17 +50,28 @@ sysc = ss(A,B,C,D);
 sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
-% 2 seconds without payload 2.3 with payload
+% % 2 seconds without payload
+% % solve ricatti equation
+% Aic = [ A zeros(12,6); C eye(6,6)];
+% Bic = [B;D];
+% Q = 1E3*eye(18);
+% R = eye(4);
+% [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
+% K0 = K(1:4,1:12);
+% K1 = K(1:4,13:18);
+% K1 = 16*K1;
+
+% 2.5 seconds without payload
 % solve ricatti equation
 Aic = [ A zeros(12,6); C eye(6,6)];
 Bic = [B;D];
 Q = 1E3*eye(18);
-R = eye(4);
+R = 1E-12*eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
-K0 = K(1:4,1:12);
-K1 = K(1:4,13:18);
-% Igain = 16 % without payload
-Igain = 15;
+K0 = K(1:4,1:12)
+K1 = K(1:4,13:18)
+% K1 = 14*K1;
+K1 = 13*K1;
 
 % % 2.5 seconds without payload 2.8 with payload
 % % solve ricatti equation
@@ -72,8 +83,8 @@ Igain = 15;
 % info
 % K1 = K(1:4,1:6)
 % K0 = K(1:4,7:18)
-% % Igain = 14 % without payload
-% Igain = 13;
+% % K1 = 14*K1;
+% K1 = 13*K1;
 
 
 
