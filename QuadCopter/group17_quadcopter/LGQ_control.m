@@ -70,7 +70,7 @@ W(1:3,1:3) = Wxyz;
 W(7:9,7:9) = Wptp;
 V = [Wxyz zeros(3);zeros(3) Wptp];
 Qw = W*transpose(W);
-Rv = V*transpose(V);
+Rv = 10E6*V*transpose(V);
 
 % rank(obsv(A,C))
 % [~,flag] = chol([Qw zeros(12,6);zeros(6,12) Rv])
