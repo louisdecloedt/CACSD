@@ -51,16 +51,14 @@ sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
 % solve ricatti equation
-Aic = [eye(size(C,1)) C; zeros(12,6) A];
-Bic = [D;B];
-Q = eye(18);
-R = eye(4);
-[~,K,~,info] = idare(Aic,Bic,Q,R);
-K1 = K(1:4,1:6);
-K1 = 20*K1;
-K1(1:4,3) = 1.5*K1(1:4,3);
-K1(1:4,6) = 2*K1(1:4,6);
-K0 = 1.4*K(1:4,7:18);
+Aic = [ A zeros(12,6); C eye(6,6)];
+Bic = [B;D];
+Q = 1E3*eye(18);
+R = 1*eye(4);
+[~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
+K0 = K(1:4,1:12);
+K1 = K(1:4,13:18);
+K1 = 12*K1;
 
 % covariance matrices
 Wxyz = 2.5E-5*eye(3);
@@ -70,7 +68,12 @@ W(1:3,1:3) = Wxyz;
 W(7:9,7:9) = Wptp;
 V = [Wxyz zeros(3);zeros(3) Wptp];
 Qw = W*transpose(W);
-Rv = 1E7*V*transpose(V);
+Rv = V*transpose(V);
+% Rv = 1E9*Rv;
+% Rv(3,3) = 1E-5*Rv(3,3);
+% Rv(6,6) = 1E5*Rv(6,6);
+Rv(1:3,1:3) = 1E6*Rv(1:3,1:3);
+Rv(4:6,4:6) = 1E15*Rv(4:6,4:6);
 
 % rank(obsv(A,C))
 % [~,flag] = chol([Qw zeros(12,6);zeros(6,12) Rv])
