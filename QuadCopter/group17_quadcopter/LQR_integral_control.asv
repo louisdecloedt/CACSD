@@ -57,14 +57,22 @@ sysd = c2d(sysc,Ts,"zoh");
 % K1 = -K(1:4,13:18);
 
 % solve ricatti equation
-Aic = [ A zeros(12,6); C zeros(6,6)];
+Aic = [ A zeros(12,6); 1E*C zeros(6,6)];
 Bic = [B;D];
-Q = 1E3*eye(18);
-% Q = 1*eye(18);
+Q = 1*eye(18);
 R = 1*eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
 K0 = K(1:4,1:12)
-K1 = -1E14*K(1:4,13:18)
+K1 = -K(1:4,13:18)
+
+% % solve ricatti equation
+% Aic = [ A zeros(12,6); C zeros(6,6)];
+% Bic = [B;D];
+% Q = 1E3*eye(18);
+% R = 1*eye(4);
+% [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
+% K0 = K(1:4,1:12)
+% K1 = -1E14*K(1:4,13:18)
 
 % % solve ricatti equation
 % Aic = [eye(size(C,1)) C; zeros(12,6) A];
