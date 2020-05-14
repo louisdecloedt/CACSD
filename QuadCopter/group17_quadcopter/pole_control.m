@@ -48,63 +48,7 @@ sysc = ss(A,B,C,D);
 sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
-% solve ricatti equation
-Q = eye(size(C,2));
-Q(3,3) = 10000;
-Q(6,6) = 10000;
-R = eye(size(B,2));
-[~,K,~] = idare(A,B,Q,R,[],[],[]);
-
-%Reference K out of working LQR controller
-K_d = K;
-p_cl_z = eig(A-B*K_d);
-%p_cl_ref_s =  log(p_cl_ref_z)./Ts;
-
-%Poles in continuous time:
-%Closed loop (A - BK)
-%Dominant poles: via second order interpretation dominant poles:
-%damping ratio: 0.75, settle time 4 sec
-% p_cl = [-1.15+1.1014i 
-%         -1.15-1.1014i 
-%         -6 
-%         -6.5 
-%         -7 
-%         -7.5 
-%         -8 
-%         -8.5 
-%         -9 
-%         -9.5 
-%         -10 
-%         -10.5];
-    
-% a = 3;
-% p_cl = [-0.73+0.7i 
-%         -0.73-0.7i 
-%         -a 
-%         -a - 0.7
-%         -a - 0.4
-%         -a - 0.4
-%         -a - 0.7
-%         -a - 0.75
-%         -a - 1
-%         -a - 1.1
-%         -a - 1.3;
-%         -a - 1.25];
-
-% a = 1.2;
-% p_cl = [-0.26+0.25i 
-%         -0.26-0.25i 
-%         -a 
-%         -a - 0.1
-%         -a - 0.4
-%         -a - 0.2
-%         -a - 0.4
-%         -a - 0.2
-%         -a - 0.2
-%         -a - 0.25
-%         -a - 0.5;
-%         -a - 0.2];
-
+% pole placement K
 a = 5.5;
 nf = 2;
 p_cl = [nf*(-0.8+0.6i)
@@ -121,26 +65,18 @@ p_cl = [nf*(-0.8+0.6i)
         -a - 0.02];
 
 p_d_cl = exp(Ts*p_cl);
-
 K_d = place(A,B,p_d_cl);
-%K_d = place(A,B,p_cl_z);
-%K_d = K;
-%test = eig(A - B*K_d)
+
+% pole placement L
+p_d_cl = exp(Ts*8.4*p_cl);
+L_d = place(A',C',p_d_cl)';
+
 % determine N
 r = 6;
 N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-open("AA_pole_placement.slx");
+% open("AA_pole_placement.slx");
 sim("AA_pole_placement.slx",Tmax);
-generate_report(0);
-
-
-test = eig(A - B*K_d);
-%log(eig(A - B*K))/Ts
-% log(0.9834 + 0.0148i)/Ts
-
-
-
-
+generate_report(1);
