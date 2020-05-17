@@ -44,17 +44,8 @@ Q0 = [2 0 0 0
       0 0 0 0];
 R0 = 0.005;
 
-%R0 0.006 -6.4550  -41.2918  -12.7949   -5.4042
-
-%K0       -9.1287  -52.5082  -14.9874   -6.3524
-
-%R0 0.001 -15.8114  -81.7871  -20.9428   -8.8041 
-
-% 
-%K0 -9.1287  -52.5082  -14.9874   -6.3524
 
 %Determine K
-%[K,S,e] = lqr(SYS,Q,R,N)
 %https://nl.mathworks.com/help/control/ref/lqr.html
 %N = optional, default zero (N = 0 is what we need)
 sys = ss (A,B,C,D);
@@ -62,21 +53,7 @@ sys = ss (A,B,C,D);
 %size(K)
 K = K(1,:);
 
-K
-
-% figure
-% pzmap(sys);
-
-
-%K = [-818.244 -513.84 -212.95 -72.08]
-eig(A-B*K)
-
-K
-
-% Defining the closed-loop system
-% x_dot = (A - B*K)*x
-% y = c*x
-
+%Closed loop system
 A_cl = A - B*K;
 B_cl = [0;0;0;0];
 C_cl = C;
@@ -84,10 +61,8 @@ D_cl = D;
 sys_cl = ss(A_cl,B_cl,C_cl, D_cl);
 sys_cl.OutputName={'z','\alpha','dz/dt', 'd \alpha / dt'};
 
-% disp('closed-loop poles:');
-% eig(A_cl)
 
-% Response to initial conditions
+
 
 %Setting the initial conditions
 x0 = [0  10*pi/180 0 0 ];
@@ -95,49 +70,21 @@ x0 = [0  10*pi/180 0 0 ];
 %Plotting the response of the closed-loop system to 
 %the initial conditions
 T_final = 4;
-% res = initial(sys_cl,x0,T_final);
-% initial(sys_cl,x0,T_final)
-% grid
 
 
-% res = step(sys_cl)
-% 
-% S = stepinfo(res);
-% S(1,1)
-% S(2,1)
-% S(3,1)
-% S(4,1)
-
-%stepplot)
-
-% [y,t,x] = initial(sys_cl,x0,T_final);
-% figure
-% plot(t,y)
-
-% sys2 = ss(A_cl,B_cl,C_cl,0);
-% step(sys2)
-
-t = (0:0.001:20);
-%u = ones(size(t));
-%res = initial(sys_cl,u,t,x0)
-%[y,t,x] = initial(sys_cl,x0,T_final)
 figure;
 initial(sys_cl,x0,T_final)
-% [y,t,x] = step(sys_cl);
-% stepinfo(y(:,1),t)
-% stepinfo(y(:,2),t)
-% stepinfo(y(:,3),t)
-% stepinfo(y(:,4),t)
-%S = stepinfo(res(:,2),t)
 
+%reference state
 x_d = [0.1 0 0 0];
 
 % disp('closed-loop poles:');
-EV = eig(A_cl)
+%EV = eig(A_cl)
 
-alpha = 2.2245;
-beta = 1.4768;
-eps = sin(atan(alpha/beta)) 
+%To calculate damping and natural frequency
+% alpha = 2.2245;
+% beta = 1.4768;
+% eps = sin(atan(alpha/beta)) 
 
 
 

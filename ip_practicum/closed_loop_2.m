@@ -26,25 +26,9 @@ B(4,1) = -(K_m*K_g)/(r*R_m*M*l);
 
 C = [1 0 0 0
      0 1 0 0];
-%C = eye(4);
  
 D = [0
      0];
-%D = zeros(4,1);
-
-
-% Q0 = [0.25 0 0 0
-%       0 4 0 0
-%       0   0 0 0
-%       0  0  0 0];
-% R0 = 0.003;
-
-
-Q0 = [0.5 0 0 0
-      0 6 0 0
-      0 0 0 0
-      0 0 0 0];
-R0 = 0.005;
 
 Q0 = [2 0 0 0
       0 3 0 0
@@ -61,14 +45,13 @@ x_d = [0.1 0 0 0];
 
 %Setting the initial conditions
 x0 = [0  10*pi/180 0 0 ];
-
- 
  
 %Sampling Period:
 T_s = 0.005; %s
 %
 %W_c = 2; %Hz
-W_c = 2*2*pi; %rad/s
+f = 2;
+W_c = 2*f*pi; %rad/s
 
 %Digital part
 A2 = zeros(4,4);
