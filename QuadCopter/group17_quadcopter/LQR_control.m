@@ -63,7 +63,7 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-% open("LQR_control_quadcopter.slx");
+open("LQR_control_quadcopter.slx");
 
 sim("LQR_control_quadcopter.slx",Tmax);
 generate_report(0);
