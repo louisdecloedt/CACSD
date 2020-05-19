@@ -63,7 +63,7 @@ p_cl = [nf*(-0.8+0.6i)
         -a - 0.01
         -a - 0.01
         -a - 0.02];
-
+ 
 p_d_cl = exp(Ts*p_cl);
 K_d = place(A,B,p_d_cl);
 
@@ -77,6 +77,6 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-% open("AA_pole_placement.slx");
+open("AA_pole_placement.slx");
 sim("AA_pole_placement.slx",Tmax);
 generate_report(1);
