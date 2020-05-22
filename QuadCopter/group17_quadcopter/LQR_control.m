@@ -8,7 +8,7 @@ m = 0.5;
 L = 0.25;
 k = 3E-6;
 b = 1E-7;
-g = 9.81;
+g = 9.81; 
 kd = 0.25;
 Ixx = 5E-3;
 Iyy = 5E-3;
@@ -51,9 +51,12 @@ sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
 % solve ricatti equation
+% Q = transpose(C)*C
 Q = eye(size(C,2));
-Q(3,3) = 10000;
-Q(6,6) = 10000;
+Q(1:3,1:3) = 2.5E1*Q(1:3,1:3);
+Q(4:6,4:6) = 6E0*Q(4:6,4:6);
+Q(3,3) = 1E3*Q(3,3);
+Q(6,6) = 1E3*Q(6,6);
 R = eye(size(B,2));
 [~,K,~] = idare(A,B,Q,R,[],[],[]);
 
