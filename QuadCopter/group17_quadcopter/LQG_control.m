@@ -67,15 +67,9 @@ W = eye(12);
 W(1:3,1:3) = Wxyz;
 W(7:9,7:9) = Wptp;
 V = [Wxyz zeros(3);zeros(3) Wptp];
-Qw = 0.45E-8*W*transpose(W);
-Rv = V*transpose(V);
-% Rv(3,3) = 1E-5*Rv(3,3);
-% Rv(6,6) = 1E5*Rv(6,6);
-% Rv(1:3,1:3) = 1E6*Rv(1:3,1:3);
-% Rv(4:6,4:6) = 1E15*Rv(4:6,4:6);
+Qw = 0.2E-3*W;
+Rv = V;
 
-% rank(obsv(A,C))
-% [~,flag] = chol([Qw zeros(12,6);zeros(6,12) Rv])
 
 open("LQG_control_quadcopter.slx");
 sim("LQG_control_quadcopter.slx",Tmax);
