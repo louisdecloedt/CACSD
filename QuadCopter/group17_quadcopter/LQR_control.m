@@ -51,7 +51,6 @@ sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
 % solve ricatti equation
-% Q = transpose(C)*C
 Q = eye(size(C,2));
 Q(1:3,1:3) = 2.5E1*Q(1:3,1:3);
 Q(4:6,4:6) = 6E0*Q(4:6,4:6);
@@ -66,7 +65,6 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-open("LQR_control_quadcopter.slx");
-
+% open("LQR_control_quadcopter.slx");
 sim("LQR_control_quadcopter.slx",Tmax);
 generate_report(0);

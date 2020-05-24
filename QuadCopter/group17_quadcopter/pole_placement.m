@@ -1,5 +1,5 @@
 clear;
-close all
+close all;
 
 % Parameters
 Ts = 0.05;
@@ -14,20 +14,9 @@ Iyy = 5E-3;
 Izz = 1E-2;
 cm = 1E4;
 
-% initial condition
-x0 = zeros(12,1);
-
 % Reference
-x = 0;
-y = 0;
-z = 1;
-% x = 5;
-% y = -1;
-% z = 2;
-references = zeros(1,7);
-size(references)
-references(1,1) = 1; % 1sec delay
-references(1,2:4) = [x y z];
+load references_17
+angle_ref = zeros(3,1);
 
 % linear state space
 u_e = g*m/(cm*k*4)*ones(4,1); %40.875
@@ -55,16 +44,32 @@ C(1:3,1:3) = eye(3);
 C(4:6,7:9) = eye(3);
 
 % discrete transformation
-[A,B,C,D] = bilinear(A,B,C,D,1/Ts);
-
 sysc = ss(A,B,C,D);
 sysd = c2d(sysc,Ts,"zoh");
-[Ad,Bd,Cd,Dd] = ssdata(sysd);
+[A,B,C,D] = ssdata(sysd);
 
-% solve ricatti equation
-Q = eye(size(C,2));
-R = eye(size(B,2));
-[~,K,~] = icare(A,B,Q,R,[],[],[]);
+% pole placement K
+a = 5.5;
+nf = 2;
+p_cl = [nf*(-0.8+0.6i)
+        nf*(-0.8-0.6i)
+        -2.1
+        -a
+        -a 
+        -a 
+        -a 
+        -a - 0.01
+        -a - 0.01
+        -a - 0.01
+        -a - 0.01
+        -a - 0.02];
+ 
+p_d_cl = exp(Ts*p_cl);
+K_d = place(A,B,p_d_cl);
+
+% pole placement L
+p_d_cl = exp(Ts*8.4*p_cl);
+L_d = place(A',C',p_d_cl)';
 
 % determine N
 r = 6;
@@ -72,8 +77,6 @@ N = [A-eye(size(A)) B; C D]\[zeros(18-r,r); eye(r)];
 Nx = N(1:12,:);
 Nu = N(13:16,:);
 
-
-
-
-
-
+% open("pole_placement_quadcopter.slx");
+sim("pole_placement_quadcopter.slx",Tmax);
+generate_report(1);

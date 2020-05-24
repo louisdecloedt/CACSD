@@ -50,7 +50,6 @@ sysc = ss(A,B,C,D);
 sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
-% 2 seconds without payload 2.3 with payload
 % solve ricatti equation
 Aic = [ A zeros(12,6); C eye(6,6)];
 Bic = [B;D];
@@ -59,24 +58,10 @@ R = eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
 K0 = K(1:4,1:12);
 K1 = K(1:4,13:18);
-% Igain = 16 % without payload
+
 Igain = 15;
 
-% % 2.5 seconds without payload 2.8 with payload
-% % solve ricatti equation
-% Aic = [eye(size(C,1)) C; zeros(12,6) A];
-% Bic = [D;B];
-% Q = 1E11*eye(18);
-% R = 1E-11*eye(4);
-% [~,K,~,info] = idare(Aic,Bic,Q,R);
-% info
-% K1 = K(1:4,1:6)
-% K0 = K(1:4,7:18)
-% % Igain = 14 % without payload
-% Igain = 13;
 
-
-
-open("LQR_integral_control_quadcopter.slx");
+% open("LQR_integral_control_quadcopter.slx");
 sim("LQR_integral_control_quadcopter.slx",Tmax);
 generate_report(0);

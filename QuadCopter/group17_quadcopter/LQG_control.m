@@ -61,16 +61,18 @@ K1 = K(1:4,13:18);
 Igain = 15;
 
 % covariance matrices
-Wxyz = 2.5E-5*eye(3);
-Wptp = 7.57E-5*eye(3);
-W = eye(12);
-W(1:3,1:3) = Wxyz;
-W(7:9,7:9) = Wptp;
-V = [Wxyz zeros(3);zeros(3) Wptp];
-Qw = 0.2E-3*W;
+Vxyz = 2.5E-5*eye(3);
+Vptp = 7.57E-5*eye(3);
+V = [Vxyz zeros(3);zeros(3) Vptp];
 Rv = V;
 
+W = eye(12);
+c = 1E-20;
+W(1:3,1:3) = c;
+W(7:9,7:9) = c;
+Qw = 0.2E-3*W;
 
-open("LQG_control_quadcopter.slx");
+
+% open("LQG_control_quadcopter.slx");
 sim("LQG_control_quadcopter.slx",Tmax);
 generate_report(1);
