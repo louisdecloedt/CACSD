@@ -57,7 +57,7 @@ Q = 1E3*eye(18);
 R = 1*eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
 K0 = K(1:4,1:12);
-K1 = K(1:4,13:18);
+K1 = K(1:4,13:15);
 Igain = 15;
 
 % covariance matrices
@@ -73,6 +73,6 @@ Qw(1:3,1:3) = c;
 Qw(7:9,7:9) = c;
 
 
-% open("LQG_control_quadcopter.slx");
+open("LQG_control_quadcopter.slx");
 sim("LQG_control_quadcopter.slx",Tmax);
 generate_report(1);

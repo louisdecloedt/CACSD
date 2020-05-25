@@ -57,11 +57,11 @@ Q = 1E3*eye(18);
 R = eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
 K0 = K(1:4,1:12);
-K1 = K(1:4,13:18);
+K1 = K(1:4,13:15);
 
 Igain = 15;
 
 
-% open("LQR_integral_control_quadcopter.slx");
+open("LQR_integral_control_quadcopter.slx");
 sim("LQR_integral_control_quadcopter.slx",Tmax);
 generate_report(0);
