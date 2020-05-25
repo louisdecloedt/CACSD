@@ -25,4 +25,8 @@ The following filenames allow the above files to reproduce our results:
 -quadcopter_sfunction.p
 -icon_quad.png
 
+
+If u experience any problems running the code please contact us. 
+(2020a MATLAB was used)
+
 Jasper Snoeks & Louis Decloedt
