@@ -67,10 +67,10 @@ V = [Vxyz zeros(3);zeros(3) Vptp];
 Rv = V;
 
 W = eye(12);
-c = 1E-20;
-W(1:3,1:3) = c;
-W(7:9,7:9) = c;
 Qw = 0.2E-3*W;
+c = 1E-8;
+Qw(1:3,1:3) = c;
+Qw(7:9,7:9) = c;
 
 
 % open("LQG_control_quadcopter.slx");
