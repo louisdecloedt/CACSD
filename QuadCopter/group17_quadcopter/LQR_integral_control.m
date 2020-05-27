@@ -50,18 +50,41 @@ sysc = ss(A,B,C,D);
 sysd = c2d(sysc,Ts,"zoh");
 [A,B,C,D] = ssdata(sysd);
 
-% solve ricatti equation
-Aic = [ A zeros(12,6); C eye(6,6)];
-Bic = [B;D];
-Q = 1E3*eye(18);
-R = eye(4);
+
+Aic = [ A zeros(12,3); C(1:3,:) eye(3)];
+Bic = [B;D(1:3,:)];
+Q = 1E2*eye(15);
+Q(15,15) = 1e5;
+
+Q = eye(15,15);
+Q(1:3,1:3) = 2.5E1*Q(1:3,1:3);
+Q(4:6,4:6) = 6E1*Q(4:6,4:6);
+Q(3,3) = 1E2*Q(3,3);
+Q(6,6) = 1E2*Q(6,6);
+Q(13,13) = 2;
+Q(14,14) = 2;
+Q(15,15) = 1e2;
+Igain = 19;
+
+R = 1*eye(4);
 [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
-K0 = K(1:4,1:12);
-K1 = K(1:4,13:15);
+K0 = K(1:4,1:12)
+K1 = K(1:4,13:15)
+%Igain = 13;
 
-Igain = 15;
+
+% % solve ricatti equation
+% Aic = [ A zeros(12,6); C eye(6,6)];
+% Bic = [B;D];
+% Q = 1E3*eye(18);
+% R = eye(4);
+% [~,K,~] = idare(Aic,Bic,Q,R,[],[],[]);
+% K0 = K(1:4,1:12);
+% K1 = K(1:4,13:15);
+% 
+% Igain = 15;
 
 
-open("LQR_integral_control_quadcopter.slx");
+%open("LQR_integral_control_quadcopter.slx");
 sim("LQR_integral_control_quadcopter.slx",Tmax);
 generate_report(0);
