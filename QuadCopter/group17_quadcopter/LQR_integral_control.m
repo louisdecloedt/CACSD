@@ -53,6 +53,7 @@ sysd = c2d(sysc,Ts,"zoh");
 % solve ricatti equation
 Aic = [ A zeros(12,3); C(1:3,:) eye(3)];
 Bic = [B;D(1:3,:)];
+
 Q = eye(15,15);
 Q(1:3,1:3) = 2.5E1*Q(1:3,1:3);
 Q(4:6,4:6) = 6E1*Q(4:6,4:6);
